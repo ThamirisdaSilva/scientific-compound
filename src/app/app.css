@@ -1,0 +1,16 @@
+.nav {
+  background: #000;
+  padding: 1rem 2rem;
+  display: flex;
+  gap: 2rem;
+  border-bottom: 1px solid rgb(236, 24, 91);
+}
+
+.nav a {
+  color: #ffffff;
+  text-decoration: none;
+}
+
+.nav a.active {
+  color: rgb(236, 24, 91);
+}

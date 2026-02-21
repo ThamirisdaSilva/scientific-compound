@@ -1,0 +1,28 @@
+.container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 2rem;
+}
+
+.subtitle {
+  max-width: 600px;
+  margin-bottom: 2rem;
+  opacity: 0.8;
+}
+
+.btn {
+  padding: 0.8rem 1.5rem;
+  border: 1px solid rgb(236, 24, 91);
+  text-decoration: none;
+  color: #ffffff;
+  transition: 0.3s ease;
+}
+
+.btn:hover {
+  background: rgb(236, 24, 91);
+  color: #000;
+}

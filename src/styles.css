@@ -1,1 +1,11 @@
-/* You can add global styles to this file, and also import other style files */
+body {
+  margin: 0;
+  background: #000;
+  color: #ffffff;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Títulos com destaque */
+h1, h2, h3 {
+  color: rgb(236, 24, 91);
+}
