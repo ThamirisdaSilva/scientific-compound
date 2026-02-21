@@ -1,59 +1,142 @@
-# ScientificCompound
+# Scientific Compound
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 20.3.16.
+Scientific Compound é uma SPA construída em Angular com o objetivo de demonstrar decisões arquiteturais no front-end que impactam escalabilidade, performance e evolução futura do sistema.
 
-## Development server
+Esta branch representa a versão inicial do projeto (validação de domínio).
 
-To start a local development server, run:
+---
 
-```bash
-ng serve
+## Objetivo
+
+Validar o domínio da aplicação e estruturar a base do front-end com decisões arquiteturais conscientes, ainda sem foco em infraestrutura distribuída.
+
+O projeto não busca complexidade, mas sim clareza estrutural.
+
+---
+
+## Stack
+
+- Angular (Standalone Components)
+- TypeScript
+- Lazy Loading
+- Estrutura Feature-First
+
+---
+
+## Estrutura do Projeto
+
+```
+src/app/
+  features/
+    home/
+    compounds/
+      compounds.routes.ts
+      compounds-list/
+      compound-detail/
+      data/
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+A aplicação é organizada por domínio (feature-first), não por tipo de arquivo.
 
-## Code scaffolding
+Essa decisão reduz acoplamento estrutural e facilita crescimento futuro.
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+---
 
-```bash
-ng generate component component-name
+## Decisões Arquiteturais
+
+### 1. Organização por Domínio
+
+Cada funcionalidade é isolada dentro de sua própria pasta.
+
+Benefícios:
+
+- Manutenção simplificada
+- Evolução modular
+- Clareza estrutural
+- Base para possível extração futura
+
+---
+
+### 2. Standalone Components
+
+O projeto utiliza Angular Standalone Components, eliminando a necessidade de NgModules.
+
+Benefícios:
+
+- Menos boilerplate
+- Imports explícitos
+- Arquitetura mais previsível
+- Menor complexidade estrutural
+
+---
+
+### 3. Lazy Loading
+
+A feature `compounds` é carregada sob demanda via `loadChildren`.
+
+Isso reduz o bundle inicial e melhora performance percebida.
+
+Rotas principais:
+
+- `/home`
+- `/compounds`
+- `/compounds/:name`
+
+---
+
+### 4. Dados Mockados
+
+Os dados são mantidos localmente dentro da feature:
+
+```
+data/compounds.data.ts
 ```
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+Nesta fase:
 
-```bash
-ng generate --help
-```
+- Não há backend real
+- Não há camada de API simulada
+- Não há cache
+- Não há estratégia de infraestrutura
 
-## Building
+O objetivo é validar fluxo e domínio antes de introduzir complexidade adicional.
 
-To build the project run:
+---
 
-```bash
-ng build
-```
+## Estado Atual
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+Esta versão representa uma SPA estruturada e funcional.
 
-## Running unit tests
+Ela já possui:
 
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
+- Organização por domínio
+- Lazy loading
+- Separação básica de responsabilidades
+- Estrutura preparada para evolução
 
-```bash
-ng test
-```
+Ainda não há:
 
-## Running end-to-end tests
+- Camada de API real
+- Simulação de latência
+- Estratégia de cache
+- Micro Frontend
+- Infraestrutura distribuída
 
-For end-to-end (e2e) testing, run:
+---
 
-```bash
-ng e2e
-```
+## Próxima Etapa
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+Na próxima branch, a arquitetura evolui para:
 
-## Additional Resources
+- Separação formal da camada de dados
+- Simulação de API
+- Introdução de service intermediário
+- Preparação para escalabilidade e possível adoção de Micro Frontends
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+---
+
+## Conclusão
+
+Scientific Compound é um projeto simples em aparência, mas estruturado com decisões conscientes desde o início.
+
+A evolução será incremental e arquiteturalmente orientada.
