@@ -25,7 +25,6 @@ O projeto não busca complexidade, mas sim clareza estrutural.
 
 ## Estrutura do Projeto
 
-```
 src/app/
   features/
     home/
@@ -34,7 +33,6 @@ src/app/
       compounds-list/
       compound-detail/
       data/
-```
 
 A aplicação é organizada por domínio (feature-first), não por tipo de arquivo.
 
@@ -42,68 +40,100 @@ Essa decisão reduz acoplamento estrutural e facilita crescimento futuro.
 
 ---
 
-## Decisões Arquiteturais
+# Decisões Arquiteturais
 
-### 1. Organização por Domínio
+## 1. Organização por Domínio (Feature-First)
+
+A aplicação é organizada por responsabilidade de negócio, não por tipo de arquivo.
 
 Cada funcionalidade é isolada dentro de sua própria pasta.
 
+Estrutura:
+
+features/
+  compounds/
+    compounds.routes.ts
+    compounds-list/
+    compound-detail/
+    data/
+
+Essa escolha evita:
+
+- Espalhamento de arquivos relacionados ao mesmo domínio
+- Dependências cruzadas entre funcionalidades
+- Acoplamento estrutural
+
+Cada feature é tratada como um módulo isolado de negócio.
+
+Benefícios arquiteturais:
+
+- Isolamento de responsabilidades
+- Facilidade de manutenção
+- Escalabilidade modular
+- Base estrutural para futura extração como Micro Frontend
+
+Essa organização reduz impacto de crescimento e evita reestruturações futuras.
+
+---
+
+## 2. Standalone Components
+
+O projeto utiliza Angular Standalone Components, eliminando NgModules globais.
+
+Motivação:
+
+Reduzir complexidade estrutural e tornar dependências explícitas.
+
 Benefícios:
 
-- Manutenção simplificada
-- Evolução modular
-- Clareza estrutural
-- Base para possível extração futura
+- Imports claros e previsíveis
+- Melhor tree-shaking
+- Menos acoplamento implícito
+- Estrutura mais simples para extração futura
+
+A decisão não é estética, é arquitetural.
 
 ---
 
-### 2. Standalone Components
+## 3. Lazy Loading Estratégico
 
-O projeto utiliza Angular Standalone Components, eliminando a necessidade de NgModules.
+A feature compounds é carregada sob demanda via loadChildren.
 
-Benefícios:
+Páginas internas utilizam loadComponent.
 
-- Menos boilerplate
-- Imports explícitos
-- Arquitetura mais previsível
-- Menor complexidade estrutural
+Objetivo:
 
----
+- Reduzir bundle inicial
+- Carregar apenas o necessário
+- Preparar a aplicação para distribuição eficiente
 
-### 3. Lazy Loading
-
-A feature `compounds` é carregada sob demanda via `loadChildren`.
-
-Isso reduz o bundle inicial e melhora performance percebida.
-
-Rotas principais:
-
-- `/home`
-- `/compounds`
-- `/compounds/:name`
+Lazy loading é tratado como estratégia de entrega, não como otimização tardia.
 
 ---
 
-### 4. Dados Mockados
+## 4. Separação Inicial de Dados
 
-Os dados são mantidos localmente dentro da feature:
+Nesta branch, os dados estão localizados dentro da própria feature:
 
-```
 data/compounds.data.ts
-```
 
-Nesta fase:
+Nesta fase, o foco é validar:
 
-- Não há backend real
-- Não há camada de API simulada
-- Não há cache
-- Não há estratégia de infraestrutura
+- Fluxo da aplicação
+- Contrato do domínio
+- Estrutura de navegação
 
-O objetivo é validar fluxo e domínio antes de introduzir complexidade adicional.
+Ainda não há:
+
+- Camada formal de API
+- Simulação de latência
+- Estratégia de cache
+
+A complexidade será introduzida de forma incremental na próxima etapa.
 
 ---
 
-## Estado Atual
+# Estado Atual
 
 Esta versão representa uma SPA estruturada e funcional.
 
@@ -124,7 +154,7 @@ Ainda não há:
 
 ---
 
-## Próxima Etapa
+# Próxima Etapa
 
 Na próxima branch, a arquitetura evolui para:
 
@@ -135,7 +165,7 @@ Na próxima branch, a arquitetura evolui para:
 
 ---
 
-## Conclusão
+# Conclusão
 
 Scientific Compound é um projeto simples em aparência, mas estruturado com decisões conscientes desde o início.
 
