@@ -1,29 +1,74 @@
 # Scientific Compound
 
-Scientific Compound é uma SPA construída em Angular com o objetivo de demonstrar decisões arquiteturais no front-end que impactam escalabilidade, performance e evolução futura do sistema.
+Scientific Compound é uma SPA construída em Angular com o objetivo de demonstrar decisões arquiteturais no front-end que impactam organização, performance e evolução futura do sistema.
 
-Esta branch representa a versão inicial do projeto (validação de domínio).
-
----
-
-## Objetivo
-
-Validar o domínio da aplicação e estruturar a base do front-end com decisões arquiteturais conscientes, ainda sem foco em infraestrutura distribuída.
-
-O projeto não busca complexidade, mas sim clareza estrutural.
+Esta branch (`main`) representa a versão inicial do projeto, focada na validação do domínio e na definição de uma base estrutural consciente.
 
 ---
 
-## Stack
+## 1. Projeto
 
-- Angular (Standalone Components)
-- TypeScript
-- Lazy Loading
-- Estrutura Feature-First
+- SPA simples
+- Lista e visualização de detalhes
+- Foco em clareza estrutural
+- Ênfase em decisões arquiteturais desde o início
+
+O objetivo desta versão não é escalar infraestrutura, mas estruturar corretamente antes de qualquer evolução.
 
 ---
 
-## Estrutura do Projeto
+## 2. Standalone Components
+
+A aplicação utiliza Angular Standalone Components, eliminando a necessidade de NgModules globais.
+
+**Motivação:**
+
+- Tornar dependências explícitas
+- Reduzir boilerplate
+- Simplificar estrutura
+
+**Impacto arquitetural:**
+
+- Estrutura mais previsível
+- Menor acoplamento implícito
+- Melhor base para isolamento futuro
+
+---
+
+## 3. Comportamento Assíncrono
+
+A aplicação simula chamadas assíncronas utilizando `Promise` + `setTimeout`.
+
+**Objetivo:**
+
+- Validar loading state
+- Simular latência de rede
+- Aproximar comportamento do ambiente real
+
+Mesmo sem backend, o fluxo já se comporta como uma aplicação conectada a uma API.
+
+---
+
+## 4. Cache em Memória
+
+Implementação de cache simples em memória.
+
+**Comportamento:**
+
+- Primeira chamada → simula latência
+- Chamadas subsequentes → retorno imediato
+
+**Benefício:**
+
+- Evita repetição de processamento
+- Demonstra controle básico de consumo de dados
+
+---
+
+## 5. Organização por Domínio (Feature-First)
+
+A estrutura do projeto é organizada por responsabilidade de negócio, e não por tipo de arquivo.
+
 ```
 src/app/
   features/
@@ -35,139 +80,112 @@ src/app/
       data/
 ```
 
-A aplicação é organizada por domínio (feature-first), não por tipo de arquivo.
+Tudo relacionado ao domínio `compounds` está concentrado dentro da própria feature.
 
-Essa decisão reduz acoplamento estrutural e facilita crescimento futuro.
+**Benefícios:**
 
----
-
-# Decisões Arquiteturais
-
-## 1. Organização por Domínio (Feature-First)
-
-A aplicação é organizada por responsabilidade de negócio, não por tipo de arquivo.
-
-Cada funcionalidade é isolada dentro de sua própria pasta.
-
-Estrutura:
-
-features/
-  compounds/
-    compounds.routes.ts
-    compounds-list/
-    compound-detail/
-    data/
-
-Essa escolha evita:
-
-- Espalhamento de arquivos relacionados ao mesmo domínio
-- Dependências cruzadas entre funcionalidades
-- Acoplamento estrutural
-
-Cada feature é tratada como um módulo isolado de negócio.
-
-Benefícios arquiteturais:
-
+- Redução de acoplamento estrutural
 - Isolamento de responsabilidades
-- Facilidade de manutenção
-- Escalabilidade modular
-- Base estrutural para futura extração como Micro Frontend
-
-Essa organização reduz impacto de crescimento e evita reestruturações futuras.
+- Crescimento modular
+- Base para futura extração
 
 ---
 
-## 2. Standalone Components
+## 6. Rotas Isoladas por Feature
 
-O projeto utiliza Angular Standalone Components, eliminando NgModules globais.
+As rotas da funcionalidade `compounds` estão definidas dentro da própria feature.
 
-Motivação:
+O aplicativo principal apenas delega o acesso via `loadChildren`, sem conhecer detalhes internos da implementação.
 
-Reduzir complexidade estrutural e tornar dependências explícitas.
+Isso garante:
 
-Benefícios:
-
-- Imports claros e previsíveis
-- Melhor tree-shaking
-- Menos acoplamento implícito
-- Estrutura mais simples para extração futura
-
-A decisão não é estética, é arquitetural.
+- Navegação organizada por domínio
+- Desacoplamento entre app principal e feature
 
 ---
 
-## 3. Lazy Loading Estratégico
+## 7. Lazy Loading
 
-A feature compounds é carregada sob demanda via loadChildren.
+A aplicação utiliza:
 
-Páginas internas utilizam loadComponent.
+- `loadChildren` para carregar a feature
+- `loadComponent` para páginas internas
 
-Objetivo:
+**Objetivo:**
 
-- Reduzir bundle inicial
+- Reduzir o bundle inicial
 - Carregar apenas o necessário
-- Preparar a aplicação para distribuição eficiente
+- Dividir o código em partes menores
 
-Lazy loading é tratado como estratégia de entrega, não como otimização tardia.
-
----
-
-## 4. Separação Inicial de Dados
-
-Nesta branch, os dados estão localizados dentro da própria feature:
-
-data/compounds.data.ts
-
-Nesta fase, o foco é validar:
-
-- Fluxo da aplicação
-- Contrato do domínio
-- Estrutura de navegação
-
-Ainda não há:
-
-- Camada formal de API
-- Simulação de latência
-- Estratégia de cache
-
-A complexidade será introduzida de forma incremental na próxima etapa.
+Lazy loading é tratado como estratégia arquitetural, não como otimização tardia.
 
 ---
 
-# Estado Atual
+## 8. Bundle
 
-Esta versão representa uma SPA estruturada e funcional.
+Bundle é o pacote final de código que o navegador baixa ao acessar a aplicação.
 
-Ela já possui:
+Sem carregamento sob demanda:
+- Todo o código entra no bundle inicial
+
+Com lazy loading:
+- O código é dividido em partes menores
+- Cada parte é carregada quando necessária
+
+Isso reduz impacto no carregamento inicial e prepara o sistema para crescimento.
+
+---
+
+## 9. Camada de Dados
+
+Os dados estão organizados em:
+
+- `compounds.data.ts` → estrutura de dados
+- `compounds.api.ts` → funções de acesso
+
+Os componentes não acessam o array diretamente.
+
+Existe uma camada intermediária que simula acesso externo, preparando a aplicação para futura integração com backend real.
+
+---
+
+## 10. Simulação de API
+
+A camada de acesso utiliza `Promise` + `setTimeout`.
+
+Essa abordagem permite:
+
+- Simular latência
+- Validar comportamento assíncrono
+- Testar experiência real de navegação
+
+---
+
+## 11. Estado Atual
+
+Nesta branch já existem:
 
 - Organização por domínio
-- Lazy loading
-- Separação básica de responsabilidades
-- Estrutura preparada para evolução
+- Standalone Components
+- Rotas isoladas
+- Lazy loading estratégico
+- Separação entre dados e acesso
+- Simulação assíncrona
+- Cache simples em memória
 
-Ainda não há:
+Ainda não existem:
 
-- Camada de API real
-- Simulação de latência
-- Estratégia de cache
-- Micro Frontend
+- Backend real
 - Infraestrutura distribuída
+- Microfrontend
+- Deploy independente por módulo
 
 ---
 
-# Próxima Etapa
+## Conclusão
 
-Na próxima branch, a arquitetura evolui para:
+Esta branch demonstra que escalabilidade começa na arquitetura.
 
-- Separação formal da camada de dados
-- Simulação de API
-- Introdução de service intermediário
-- Preparação para escalabilidade e possível adoção de Micro Frontends
+Antes de escalar infraestrutura, é necessário organizar responsabilidades, reduzir acoplamento e estruturar corretamente o domínio.
 
----
-
-# Conclusão
-
-Scientific Compound é um projeto simples em aparência, mas estruturado com decisões conscientes desde o início.
-
-A evolução será incremental e arquiteturalmente orientada.
+A evolução do projeto será incremental e orientada por decisões arquiteturais.
