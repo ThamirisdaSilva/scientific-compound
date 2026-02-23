@@ -1,0 +1,20 @@
+<div class="container">
+
+  <div *ngIf="loading">Carregando...</div>
+
+  <div *ngIf="notFound">
+    <h1>Composto não encontrado</h1>
+    <a routerLink="/compounds" class="back">Voltar</a>
+  </div>
+
+  <div *ngIf="compound">
+    <h1>{{ compound.name }}</h1>
+
+    <p><strong>Fórmula:</strong> {{ compound.formula }}</p>
+    <p><strong>Aplicação:</strong> {{ compound.application }}</p>
+
+    <br>
+    <a routerLink="/compounds" class="back">Voltar</a>
+  </div>
+
+</div>
