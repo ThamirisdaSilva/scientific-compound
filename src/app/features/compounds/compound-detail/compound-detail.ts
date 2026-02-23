@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { Compound } from '../data/compounds.data';
-import { getCompoundBySlug } from '../data/compounds.api';
+import { Compound } from '../domain/compound.model';
+import { getCompoundBySlug } from '../api/compounds.api';
 
 @Component({
   standalone: true,

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { getCompoundBySlug } from './compounds.api';
+import { getCompoundBySlug } from '../api/compounds.api';
 import { Compound } from '../domain/compound.model';
 
 @Injectable({ providedIn: 'root' })
