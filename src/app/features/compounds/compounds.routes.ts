@@ -4,13 +4,13 @@ export const COMPOUNDS_ROUTES: Routes = [
   {
     path: '',
     loadComponent: () =>
-      import('./compounds-list/compounds-list')
+      import('./pages/compounds-list/compounds-list')
         .then(m => m.CompoundsList)
   },
   {
     path: ':name',
     loadComponent: () =>
-      import('./compound-detail/compound-detail')
+      import('./pages/compound-detail/compound-detail')
         .then(m => m.CompoundDetail)
   }
 ];

@@ -142,6 +142,16 @@ path: 'compounds'
 
 Isso não mudou nesta branch.
 
+## Alinhamento de Contratos
+
+Ao formalizar contratos — como model ou parâmetros de rota — todos os consumidores precisam estar alinhados.
+
+Exemplo desta branch:
+A rota mudou de `:name` para `:slug`, mas o componente ainda buscava `name`.  
+Não houve erro de compilação, apenas falha silenciosa no carregamento.
+
+Arquitetura exige consistência entre quem define e quem consome o contrato.
+
 ---
 
 # 4. O Que Não Mudou

@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { Compound } from '../../domain/compound.model';
-import { CompoundsService } from '../../data/compounds.service';
+import { Compound } from '../../domain/compound.model'
+import { getCompoundBySlug } from '../../api/compounds.api';
 
 @Component({
   standalone: true,
@@ -16,17 +16,19 @@ export class CompoundDetail implements OnInit {
   loading = true;
   notFound = false;
 
-  constructor(
-    private route: ActivatedRoute,
-    private compoundsService: CompoundsService
-  ) {}
+  constructor(private route: ActivatedRoute) {}
 
   async ngOnInit() {
-    const slug = this.route.snapshot.paramMap.get('slug') ?? '';
-    const result = await this.compoundsService.getBySlug(slug);
+    const slug = this.route.snapshot.paramMap.get('name') ?? '';
+    const result = await getCompoundBySlug(slug);
 
-    this.compound = result;
-    this.notFound = !result;
+    if (!result) {
+      this.notFound = true;
+    } else {
+      this.compound = result;
+    }
+
     this.loading = false;
   }
+
 }
