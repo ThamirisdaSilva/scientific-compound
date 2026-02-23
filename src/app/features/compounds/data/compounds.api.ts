@@ -1,4 +1,5 @@
-import { COMPOUNDS, Compound } from './compounds.data';
+import { COMPOUNDS } from './compounds.data';
+import { Compound } from './../domain/compound.model'
 
 let cache: Compound[] | null = null;
 let cacheBySlug: Record<string, Compound> = {};

@@ -1,9 +1,4 @@
-export interface Compound {
-  slug: string;
-  name: string;
-  formula: string;
-  application: string;
-}
+import { Compound } from '../domain/compound.model';
 
 export const COMPOUNDS: Compound[] = [
  {
