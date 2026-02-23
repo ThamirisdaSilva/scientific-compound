@@ -1,59 +1,186 @@
-# ScientificCompound
+# Scientific Compound
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 20.3.16.
+## Evolução Arquitetural — De SPA Organizada para Estrutura com Isolamento Interno Formal
 
-## Development server
+Este documento descreve a evolução do projeto entre as branches.
 
-To start a local development server, run:
+A Branch 1 já utilizava organização por domínio (feature-first) e lazy loading.
 
-```bash
-ng serve
+Na Branch 2, o foco não foi “organizar pela primeira vez”, mas sim formalizar melhor a estrutura interna da feature, preparando o domínio para evolução futura e possível extração.
+
+---
+
+# Branch 1 — SPA Organizada
+
+Na primeira fase, criamos uma SPA Angular com:
+
+- Duas áreas principais: `home` e `compounds`
+- Organização por domínio (feature-first)
+- Rotas isoladas por feature
+- Lazy loading
+- Dados mockados
+- Simulação assíncrona
+
+Estrutura base:
+
+```
+src/app/
+  features/
+    home/
+    compounds/
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+Características dessa fase:
 
-## Code scaffolding
+- Cada domínio já estava isolado em sua própria pasta.
+- O app principal já delegava navegação via `loadChildren`.
+- A aplicação era uma SPA única, com um único build.
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+O projeto já estava organizado e funcional.
 
-```bash
-ng generate component component-name
+---
+
+# Branch 2 — Formalização de Estrutura Interna
+
+Na segunda fase, a organização por feature foi mantida.
+
+A mudança foi interna à feature `compounds`.
+
+A estrutura evoluiu de algo como:
+
+```
+features/compounds/
+  data/
+  compounds-list/
+  compound-detail/
+  compounds.routes.ts
 ```
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+Para:
 
-```bash
-ng generate --help
+```
+features/compounds/
+  domain/
+    compound.model.ts
+  data/
+    compounds.data.ts
+  api/
+    compounds.api.ts
+  service/
+    compounds.service.ts
+  pages/
+    compounds-list/
+    compound-detail/
+  compounds.routes.ts
 ```
 
-## Building
+A principal evolução foi a separação clara de responsabilidades dentro da feature.
 
-To build the project run:
+---
 
-```bash
-ng build
+# 1. Formalização do Domínio
+
+Foi criada a pasta:
+
+```
+domain/
+  compound.model.ts
 ```
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+Agora o contrato do domínio está explícito e separado de implementação.
 
-## Running unit tests
+O model não está mais implícito dentro da camada de dados.
 
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
+Isso torna a estrutura mais previsível e facilita futuras integrações.
 
-```bash
-ng test
+---
+
+# 2. Separação de Camadas Internas
+
+A feature passou a ter camadas internas bem definidas:
+
+- `data/` → dados mockados
+- `api/` → simulação de backend
+- `service/` → camada intermediária
+- `pages/` → interface do usuário
+
+Fluxo arquitetural:
+
+```
+UI → Service → API → Data
 ```
 
-## Running end-to-end tests
+Antes, os componentes acessavam diretamente funções da API mockada.
 
-For end-to-end (e2e) testing, run:
+Agora, existe uma camada de serviço intermediária (`CompoundsService`), permitindo:
 
-```bash
-ng e2e
+- Centralizar regras
+- Evoluir para HttpClient futuramente
+- Implementar cache de forma estruturada
+- Reduzir acoplamento entre UI e fonte de dados
+
+---
+
+# 3. Ajustes Estruturais Realizados
+
+Mudanças aplicadas:
+
+- Criação da pasta `domain/`
+- Criação da pasta `service/`
+- Introdução de `CompoundsService`
+- Renomeação do parâmetro de rota `:name` para `:slug`
+- Organização de páginas dentro de `pages/`
+- Atualização dos imports para refletir nova estrutura
+
+A navegação via `loadChildren` já existia e foi mantida.
+
+O app principal continua conhecendo apenas a rota:
+
+```
+path: 'compounds'
 ```
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+Isso não mudou nesta branch.
 
-## Additional Resources
+---
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+# 4. O Que Não Mudou
+
+- Continua sendo uma SPA única
+- Continua um único build
+- Continua sem Module Federation
+- Continua sem deploy independente
+- Continua sem Shell separado
+
+A infraestrutura não mudou.
+
+O que mudou foi a organização interna da feature.
+
+---
+
+# O Que Esta Estrutura Permite
+
+A nova organização permite:
+
+- Evolução mais controlada do domínio
+- Separação clara de responsabilidades
+- Possível extração futura da feature
+- Integração futura com backend real sem reestruturação
+
+Ela não transforma automaticamente o projeto em Micro Frontend.
+
+Mas reduz o esforço caso essa decisão seja tomada no futuro.
+
+---
+
+# Conclusão
+
+Branch 1 organizou o domínio.
+
+Branch 2 formalizou a estrutura interna da feature.
+
+A aplicação continua sendo uma SPA única.
+
+Porém, agora possui camadas internas mais claras, menor acoplamento e melhor preparação para evolução.
+
+A mudança foi estrutural — não infraestrutural.
